@@ -41,7 +41,7 @@ enum OperationSymbol: String, Hashable {
 typealias ButtonSpec = (symbol: OperationSymbol, type: CalculatorButtonType)
 
 let buttonSpecs: [ButtonSpec] = [
-    (.clear, .utility),     (.changeSign, .utility),    (.percent, .utility),   (.multiply, .compute),
+    (.allClear, .utility),  (.changeSign, .utility),    (.percent, .utility),   (.multiply, .compute),
     (.seven, .number),      (.eight, .number),          (.nine, .number),       (.divide, .compute),
     (.four, .number),       (.five, .number),           (.six, .number),        (.subtract, .compute),
     (.one, .number),        (.two, .number),            (.three, .number),      (.add, .compute),

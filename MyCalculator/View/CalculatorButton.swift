@@ -13,16 +13,23 @@ struct CalculatorButton: View {
         static let cornerCount = 2 * columnCount
         static let fontScaleFactor = 0.1
         static let scaleFactor = 0.8
+        static let shadowRadius = 5.0
     }
     
     let buttonSpec: ButtonSpec
     let playSound: Bool
     let size: CGSize
     let calculatorViewModel: CalculatorViewModel
+    let returnValue: (String) -> Void
     
     var body: some View {
         Button(action: {
-            calculatorViewModel.clickButton()
+            calculatorViewModel.clickButton(playSound: playSound)
+            if (buttonSpec.type == .number || buttonSpec.type == .doublewide) {
+                returnValue(buttonSpec.symbol.rawValue)
+            } else {
+                returnValue("")
+            }
         }, label: {
             ZStack {
                 RoundedRectangle(cornerRadius: cornerRadius(for: size))
@@ -35,8 +42,11 @@ struct CalculatorButton: View {
                     .font(displayFont(for: size))
                     .foregroundColor(buttonSpec.type.foregroundColor)
             }
-        })
+            .shadow(radius: Constants.shadowRadius)
+        })        
     }
+    
+    
     
     func buttonSize(for size: CGSize, spanWidth: Int) -> CGFloat {
         if spanWidth > 1 {

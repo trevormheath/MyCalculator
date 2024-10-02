@@ -20,7 +20,7 @@ struct SoundPlayer {
             player = try AVAudioPlayer(contentsOf: URL(fileURLWithPath: path))
             player?.play()
         } catch {
-            // Ignore -- the sound just won't play
+            
         }
     }
 }
