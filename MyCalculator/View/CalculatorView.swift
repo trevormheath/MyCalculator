@@ -16,55 +16,63 @@ struct CalculatorView: View {
         static let displayFontSize = 90.0
     }
 
-    var calculatorViewModel: CalculatorViewModel
-
-    @State private var playSound: Bool = false
-    @State private var displayValue: String = ""
+    @Bindable var calculatorViewModel: CalculatorViewModel
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Rectangle()
-                    .fill(.white)
-                    .ignoresSafeArea(.all)
-                
                 VStack(alignment: .trailing, spacing: DrawingConstants.buttonSpacing) {
-                    Toggle("Play sound", isOn: $playSound)
-                        .foregroundStyle(.black)
-                        .padding()
-                    Spacer()
-                    
-                    Text(String(displayValue))
-                        .font(.system(size: Constants.displayFontSize, weight: .medium))
-                        .foregroundStyle(.black)
-                        .padding(.trailing, DrawingConstants.buttonSpacing)
-                    
-                    LazyVGrid(columns: gridItems, alignment: .leading, spacing: DrawingConstants.buttonSpacing) {
-                        ForEach(buttonSpecs, id: \.symbol.rawValue) { buttonSpec in
-                            if buttonSpec.symbol == .placeholder {
-                                Text("")
-                            } else {
-                                CalculatorButton(
-                                    buttonSpec: buttonSpec,
-                                    playSound: playSound,
-                                    size: geometry.size,
-                                    calculatorViewModel: calculatorViewModel,
-                                    returnValue: {value in
-                                        displayValue += value}
-                                )
-                            }
-                        }
-                    }
-                    .padding()
-                    .padding(.bottom, DrawingConstants.safeAreaPadding)
-                    .background(.buttonAreaBackground)
-                    .clipShape(UnevenRoundedRectangle(
-                        topLeadingRadius: DrawingConstants.buttonAreaRadius,
-                        topTrailingRadius: DrawingConstants.buttonAreaRadius))
+                    accumulatorBody
+                    buttonGrid(for: geometry)
                 }
                 .edgesIgnoringSafeArea(.bottom)
             }
         }
+    }
+    
+    var accumulatorBody: some View {
+        GeometryReader {geometry in
+            VStack(alignment: .trailing) {
+                Toggle("Play sound", isOn: $calculatorViewModel.preferences.soundIsEnabled
+                )
+                .foregroundStyle(.black)
+                .padding()
+                
+                Spacer()
+                
+                Text(calculatorViewModel.displayText)
+                    .font(systemFont(for: calculatorViewModel.displayText,
+                                     thatFirst: geometry.size.width
+                                     - DrawingConstants.buttonSpacing * 2,
+                                     desiredSize: Constants.displayFontSize))
+                    .foregroundStyle(.black)
+                    .padding(.trailing, DrawingConstants.buttonSpacing)
+                
+            }
+        }
+    }
+    
+    func buttonGrid(for geometry: GeometryProxy) -> some View {
+        LazyVGrid(columns: gridItems, alignment: .leading, spacing: DrawingConstants.buttonSpacing) {
+            ForEach(buttonSpecs, id: \.symbol.rawValue) { buttonSpec in
+                if buttonSpec.symbol == .placeholder {
+                    Text("")
+                } else {
+                    CalculatorButton(
+                        buttonSpec: buttonSpec,
+                        size: geometry.size,
+                        calculatorViewModel: calculatorViewModel
+                    )
+                }
+            }
+        }
+        .padding(.top, DrawingConstants.buttonSpacing)
+        .padding(.leading, DrawingConstants.buttonSpacing)
+        .padding(.bottom, DrawingConstants.safeAreaPadding)
+        .background(.buttonAreaBackground)
+        .clipShape(UnevenRoundedRectangle(
+            topLeadingRadius: DrawingConstants.buttonAreaRadius,
+            topTrailingRadius: DrawingConstants.buttonAreaRadius))
     }
 }
 

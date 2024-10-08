@@ -11,7 +11,7 @@ enum CalculatorButtonType {
     case utility
     case compute
     case number
-    case doublewide
+    case doubleWide
 }
 
 enum OperationSymbol: String, Hashable {
@@ -41,9 +41,9 @@ enum OperationSymbol: String, Hashable {
 typealias ButtonSpec = (symbol: OperationSymbol, type: CalculatorButtonType)
 
 let buttonSpecs: [ButtonSpec] = [
-    (.allClear, .utility),  (.changeSign, .utility),    (.percent, .utility),   (.multiply, .compute),
+    (.clear, .utility),  (.changeSign, .utility),    (.percent, .utility),   (.multiply, .compute),
     (.seven, .number),      (.eight, .number),          (.nine, .number),       (.divide, .compute),
     (.four, .number),       (.five, .number),           (.six, .number),        (.subtract, .compute),
     (.one, .number),        (.two, .number),            (.three, .number),      (.add, .compute),
-    (.zero, .doublewide),   (.placeholder, .number),    (.decimal, .number),    (.calculate, .compute)
+    (.zero, .doubleWide),   (.placeholder, .number),    (.decimal, .number),    (.calculate, .compute)
 ]
